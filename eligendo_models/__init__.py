@@ -10,6 +10,7 @@ import time
 import csv
 from datetime import datetime
 
+
 class EligendoScraperIstat:
     def __init__(self, comuni_path):
         self.options = Options()
@@ -20,7 +21,8 @@ class EligendoScraperIstat:
         self.comuni_path = comuni_path
 
         # Crea cartella per il salvataggio se non esiste
-        self.data_folder = os.path.join(os.path.expanduser("~"), "Desktop", "dati_elezioni")
+        self.data_folder = os.path.join(
+            os.path.expanduser("~"), "Desktop", "dati_elezioni")
         if not os.path.exists(self.data_folder):
             os.makedirs(self.data_folder)
 
@@ -40,7 +42,8 @@ class EligendoScraperIstat:
             current_candidate = None
 
             # Cerca tutte le righe con nomi (candidati e liste)
-            rows = self.driver.find_elements(By.CSS_SELECTOR, "td[rel='nomec']")
+            rows = self.driver.find_elements(
+                By.CSS_SELECTOR, "td[rel='nomec']")
             print(f"Trovate {len(rows)} righe con nomi")
 
             for row in rows:
@@ -49,15 +52,19 @@ class EligendoScraperIstat:
                     parent_row = row.find_element(By.XPATH, "./..")
 
                     # Cerca nome
-                    nome = row.find_element(By.CSS_SELECTOR, "p[align='left']").text.strip()
+                    nome = row.find_element(
+                        By.CSS_SELECTOR, "p[align='left']").text.strip()
 
                     # Cerca voti nella stessa riga
-                    voti = parent_row.find_element(By.CSS_SELECTOR,
-                                                   "td[rel='votic'] p[align='right']").text.strip().replace('.', '')
+                    voti = parent_row.find_element(
+                        By.CSS_SELECTOR,
+                        "td[rel='votic'] p[align='right']").text.strip().replace(
+                        '.',
+                        '')
 
                     # Cerca percentuale nella stessa riga
-                    percentuale = parent_row.find_element(By.CSS_SELECTOR,
-                                                          "td[rel='percc'] p[align='right']").text.strip()
+                    percentuale = parent_row.find_element(
+                        By.CSS_SELECTOR, "td[rel='percc'] p[align='right']").text.strip()
 
                     if nome and voti:  # Se abbiamo sia nome che voti
                         # Determina se è un candidato o una lista
@@ -79,7 +86,8 @@ class EligendoScraperIstat:
                             'voti': voti,
                             'percentuale': percentuale
                         })
-                        print(f"Estratti dati: {nome} - {voti} voti - {percentuale}")
+                        print(
+                            f"Estratti dati: {nome} - {voti} voti - {percentuale}")
 
                 except Exception as e:
                     print(f"Errore nell'elaborazione di una riga: {e}")
@@ -113,7 +121,8 @@ class EligendoScraperIstat:
             codice_elettorale = row['Codice elettorale']
 
             processed_comuni += 1
-            print(f"\nProcesso comune {processed_comuni}/{total_comuni}: {comune} ({provincia})")
+            print(
+                f"\nProcesso comune {processed_comuni}/{total_comuni}: {comune} ({provincia})")
 
             try:
                 url = self.construct_url(codice_elettorale)
@@ -155,7 +164,8 @@ class EligendoScraperIstat:
 
         try:
             with open(filepath, 'w', newline='', encoding='utf-8-sig') as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
+                writer = csv.DictWriter(
+                    f, fieldnames=fieldnames, delimiter=';')
                 writer.writeheader()
                 writer.writerows(data)
             print(f"\nDati salvati con successo in: {filepath}")
