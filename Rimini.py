@@ -174,7 +174,7 @@ class EligendoScraperIstat:
 
 def main():
     # Chiedi il percorso del file
-    percorso_default = os.path.join("/Users/riccardosaporiti/Documents/Codici", "Codici ER.csv")
+    percorso_default = os.path.join("", "Codici ER.csv")
     print(f"\nPercorso di default del file CSV: {percorso_default}")
     percorso = input("Premi INVIO per usare il percorso di default o inserisci un percorso diverso: ").strip()
     
